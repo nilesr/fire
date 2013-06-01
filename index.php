@@ -72,10 +72,9 @@
 			width: document.width,
 			height: document.height
 		});
-		var boxLayer = new Kinetic.Layer();
-		var messageLayer = new Kinetic.Layer();
+		var circleLayer = new Kinetic.Layer();
 
-		var box = new Kinetic.Circle({
+		var circle = new Kinetic.Circle({
 			x: document.width - 25,
 			y: 25,
 			radius: 12.5,
@@ -84,17 +83,20 @@
 			strokeWidth: 2,
 			draggable: true
 		});
-		box.on('dragstart', function() {
+		circle.on('dragstart', function() {
 			
 		});
-		box.on('dragend', function() {
-			setTimeout(function(){box.stroke='red'},1)
+		circle.on('dragend', function() {
+			console.log("Starting timeout");
+			setTimeout(function(){
+				circle.destroy();
+				console.log("Timeout function called");
+			},1000)
 		});
 
-		boxLayer.add(box);
+		circleLayer.add(circle);
 
-		stage.add(messageLayer);
-		stage.add(boxLayer);
+		stage.add(circleLayer);
 	</script>
 		<noscript>
 			<h1>Sorry, but you need Javascript for this program to work</h1>
