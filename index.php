@@ -9,21 +9,12 @@
 
 			function drawImage(imageObj)
 			{
-				if (!stage)
-				{
-					console.log("Creating new stage");
-					var stage = new Kinetic.Stage({
-						container: "body",
-						width: document.width,
-						height: document.height
-					});
-				}
-				if (!layer)
-				{
-					console.log("Creating new layer");
-					var layer = new Kinetic.Layer();
-				}
-				console.log("Creating new image");
+				var stage = new Kinetic.Stage({
+					container: "body",
+					width: screen.width,
+					height: screen.height
+				});
+				var layer = new Kinetic.Layer();
 				var thingy = new Kinetic.Image({
 					image: imageObj,
 					x: 0,
@@ -32,55 +23,53 @@
 					height: 25,
 					draggable: true
 				});
-				console.log("Adding image to layer");
 				layer.add(thingy);
-				console.log("Adding layer to stage");
 				stage.add(layer);
-
-
 			}
 			function DrawBuildings()
 			{
 				var floors = prompt("How many floors?");
+				var rows = prompt("How many rows?");
 				floors = Math.abs(floors);
 				canvas = document.getElementById("maincanvas");
 				canvas.height = document.height;
-				var pixelspace = canvas.height / floors;
+				var verticalpixelspace = canvas.height / floors;
+				var horizontalpixelspace = canvas.width / rows;
 				var context = canvas.getContext('2d');
 				context.clearRect ( 0 , 0 , canvas.width , canvas.height );
-				if (pixelspace < 50)
+				if (verticalpixelspace < 50)
 				{
 					canvas.height = 50 * floors;
 					canvas.style.height = 50 * floors + "px";
-					pixelspace = 50;
+					verticalpixelspace = 50;
 				}
 				var tempfloors = floors
 				while (tempfloors > -1)
 				{
 					context.lineWidth=1;
 					context.beginPath();
-					context.moveTo(0,tempfloors * pixelspace);
-					context.lineTo(canvas.width,tempfloors*pixelspace);
+					context.moveTo(0,tempfloors * verticalpixelspace);
+					context.lineTo(canvas.width,tempfloors*verticalpixelspace);
 					context.stroke();
 					tempfloors = tempfloors - 1;
 				}
-				context.beginPath();
-				context.lineWidth=1;
-				context.moveTo(0,0);
-				context.lineTo(0,canvas.height);
-				context.stroke();
-				context.beginPath();
-				context.lineWidth=1;
-				context.moveTo(canvas.width,0);
-				context.lineTo(canvas.width,canvas.height);
-				context.stroke();
+				var temprows = rows;
+				while (temprows > -1)
+				{
+					context.lineWidth=1;
+					context.beginPath();
+					context.moveTo(temprows * horizontalpixelspace,0)
+					context.lineTo(temprows*horizontalpixelspace,canvas.height);
+					context.stroke();
+					temprows = temprows - 1;
+				}
 				tempfloors = 0;
 				while (tempfloors < floors)
 				{
 					context.lineWidth=1;
 					context.lineStyle="#000000";
 					context.font="20px sans-serif";
-					context.fillText(tempfloors + 1, 10, ( floors - tempfloors ) * pixelspace - pixelspace / 3);
+					context.fillText(tempfloors + 1, 10, ( floors - tempfloors ) * verticalpixelspace - verticalpixelspace / 3);
 					tempfloors = tempfloors + 1;
 				}
 			}
