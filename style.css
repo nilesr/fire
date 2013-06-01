@@ -1,0 +1,29 @@
+#maincanvas {
+	height:100%;
+	width:85%;
+	z-index:-20;
+	position:absolute;
+	left:0px;
+	right:15%;
+	padding-left:0px;
+	padding-right:15%;
+	top:0px;
+	bottom:0px;
+	padding-top:0px;
+	padding-bottom:0px;
+}
+.image {
+	position:relatave;
+}
+#box {
+	border:1px solid navy;
+	width:15%;
+	left:85%;
+	position:absolute;
+	top:70%;
+}
+.button {
+	position:relative;
+	left:85%;
+	top:0%;
+}
