@@ -4,48 +4,8 @@
 		<link rel="stylesheet" href="style.css">
 		<meta name="apple-mobile-web-app-capable" content="yes" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-		<script src="http://d3lp1msu2r81bx.cloudfront.net/kjs/js/lib/kinetic-v4.5.3.min.js"></script>
 		<script type="text/javascript" defer="defer">
-			function writeMessage(messageLayer, message) {
-				var context = messageLayer.getContext();
-				messageLayer.clear();
-				context.font = '18pt Calibri';
-				context.fillStyle = 'black';
-				context.fillText(message, 10, 25);
-			}
-			var stage = new Kinetic.Stage({
-				container: 'container',
-				width: screen.width,
-				height: screen.heigth
-			});
-			var boxLayer = new Kinetic.Layer();
-			var messageLayer = new Kinetic.Layer();
-			var rectX = 0;
-			var rectY = 0;
 
-			var box = new Kinetic.Rect({
-				x: rectX,
-				y: rectY,
-				width: 100,
-				height: 50,
-				fill: '#00D2FF',
-				stroke: 'black',
-				strokeWidth: 4,
-				draggable: true
-			});
-
-			// write out drag and drop events
-			box.on('dragstart', function() {
-				writeMessage(messageLayer, 'dragstart');
-			});
-			box.on('dragend', function() {
-				writeMessage(messageLayer, 'dragend');
-			});
-
-			boxLayer.add(box);
-
-			stage.add(messageLayer);
-			stage.add(boxLayer);
 			function DrawBuildings()
 			{
 				var floors = prompt("How many floors?");
@@ -103,7 +63,39 @@
 		<title><? echo shell_exec('date "+%A, %h %d %G, %r"'); ?></title>
 	</head>
 	<body id="body">
-		<div id="container"></div>
+	<div id="container"></div>
+	<script src="http://d3lp1msu2r81bx.cloudfront.net/kjs/js/lib/kinetic-v4.5.3.min.js"></script>
+	<script defer="defer">
+
+		var stage = new Kinetic.Stage({
+			container: 'container',
+			width: document.width,
+			height: document.height
+		});
+		var boxLayer = new Kinetic.Layer();
+		var messageLayer = new Kinetic.Layer();
+
+		var box = new Kinetic.Circle({
+			x: document.width - 25,
+			y: 25,
+			radius: 12.5,
+			fill: 'green',
+			stroke: 'black',
+			strokeWidth: 2,
+			draggable: true
+		});
+		box.on('dragstart', function() {
+			
+		});
+		box.on('dragend', function() {
+			setTimeout(function(){box.stroke='red'},1)
+		});
+
+		boxLayer.add(box);
+
+		stage.add(messageLayer);
+		stage.add(boxLayer);
+	</script>
 		<noscript>
 			<h1>Sorry, but you need Javascript for this program to work</h1>
 		</noscript>
