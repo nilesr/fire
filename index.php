@@ -79,15 +79,14 @@
 			y: 25,
 			radius: 12.5,
 			fill: 'green',
-			stroke: 'black',
-			strokeWidth: 2,
+			stroke: 'green',
+			strokeWidth: 4,
 			draggable: true
 		});
 		circle.on('dragstart', function() {
 			
 		});
 		circle.on('dragend', function() { // On the end of the drag
-			console.log("Starting timeout"); //Log some shit
 			setTimeout(function(){ // Start a timer
 				circle.setStroke("red"); // At the end of the time, set the stroke to red
 				circle.setFill("yellow"); // and the fill to yellow
@@ -95,19 +94,39 @@
 				setTimeout(function(){ // Set another timer
 					circle.setFill("red"); // At the end of that, make the whole circle red
 					circleLayer.batchDraw(); // And update the layer again
-				},2*60000); // 2 minutes
-			},13*60000); // 13 minutes
-//				},1000); // 1 second
-//			},1000); // 1 second
+//				},2*60000); // 2 minutes
+//			},13*60000); // 13 minutes
+				},1000); // 1 second
+			},1000); // 1 second
+			console.log("Circle dropped");
 		});
 
 		circleLayer.add(circle);
 
 		stage.add(circleLayer);
 		function NewThingy() {
-			var circle = circle.clone(); // This doesn't work yet
-			circleLayer.add(circle);
-		}
+			var clone = circle.clone({
+				x: document.width - 25,
+				y: 25,
+				fill: 'green',
+				stroke: 'green'
+			});
+/*			clone.on('dragend', function() { // On the end of the drag
+				setTimeout(function(){ // Start a timer
+					clone.setStroke("red"); // At the end of the time, set the stroke to red
+					clone.setFill("yellow"); // and the fill to yellow
+					circleLayer.batchDraw(); // Then update the layer
+					setTimeout(function(){ // Set another timer
+						clone.setFill("red"); // At the end of that, make the whole circle red
+						circleLayer.batchDraw(); // And update the layer again
+	//				},2*60000); // 2 minutes
+	//			},13*60000); // 13 minutes
+					},1000); // 1 second
+				},1000); // 1 second
+				console.log("Clone dropped");
+			});*/
+			circleLayer.add(clone);
+			}
 	</script>
 		<noscript>
 			<h1>Sorry, but you need Javascript for this program to work</h1>
