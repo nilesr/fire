@@ -73,60 +73,46 @@
 			height: document.height
 		});
 		var circleLayer = new Kinetic.Layer();
-
-		var circle = new Kinetic.Circle({
-			x: document.width - 25,
-			y: 25,
-			radius: 12.5,
-			fill: 'green',
-			stroke: 'green',
-			strokeWidth: 4,
-			draggable: true
-		});
-		circle.on('dragstart', function() {
-			
-		});
-		circle.on('dragend', function() { // On the end of the drag
-			setTimeout(function(){ // Start a timer
-				circle.setStroke("red"); // At the end of the time, set the stroke to red
-				circle.setFill("yellow"); // and the fill to yellow
-				circleLayer.batchDraw(); // Then update the layer
-				setTimeout(function(){ // Set another timer
-					circle.setFill("red"); // At the end of that, make the whole circle red
-					circleLayer.batchDraw(); // And update the layer again
-//				},2*60000); // 2 minutes
-//			},13*60000); // 13 minutes
-				},1000); // 1 second
-			},1000); // 1 second
-			console.log("Circle dropped");
-		});
-
-		circleLayer.add(circle);
-
-		stage.add(circleLayer);
 		function NewThingy() {
-			var clone = circle.clone({
+			console.log("NewThingy called");
+			var circle = new Kinetic.Circle({
 				x: document.width - 25,
 				y: 25,
+				radius: 12.5,
 				fill: 'green',
-				stroke: 'green'
+				stroke: 'green',
+				strokeWidth: 4,
+				draggable: true
 			});
-/*			clone.on('dragend', function() { // On the end of the drag
+			console.log("Circle object defined");
+			circleLayer.add(circle);
+			console.log("Circle added to circleLayer");
+			circle.on('dragstart', function() {
+			
+			});
+			circle.on('dragend', function() { // On the end of the drag
+				circle.setStroke("green");
+				circle.setFill("green");
+				circleLayer.batchDraw();
 				setTimeout(function(){ // Start a timer
-					clone.setStroke("red"); // At the end of the time, set the stroke to red
-					clone.setFill("yellow"); // and the fill to yellow
+					circle.setStroke("red"); // At the end of the time, set the stroke to red
+					circle.setFill("yellow"); // and the fill to yellow
 					circleLayer.batchDraw(); // Then update the layer
 					setTimeout(function(){ // Set another timer
-						clone.setFill("red"); // At the end of that, make the whole circle red
+						circle.setFill("red"); // At the end of that, make the whole circle red
 						circleLayer.batchDraw(); // And update the layer again
-	//				},2*60000); // 2 minutes
-	//			},13*60000); // 13 minutes
-					},1000); // 1 second
-				},1000); // 1 second
-				console.log("Clone dropped");
-			});*/
-			circleLayer.add(clone);
-			}
+					},2*60000); // 2 minutes
+				},13*60000); // 13 minutes
+//					},1000); // 1 second
+//				},1000); // 1 second
+				console.log("Circle dropped");
+			});
+			console.log("Event functions defined");
+			stage.add(circleLayer);
+
+		}
+
+		stage.add(circleLayer);
 	</script>
 		<noscript>
 			<h1>Sorry, but you need Javascript for this program to work</h1>
