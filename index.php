@@ -86,23 +86,34 @@
 		circle.on('dragstart', function() {
 			
 		});
-		circle.on('dragend', function() {
-			console.log("Starting timeout");
-			setTimeout(function(){
-				circle.destroy();
-				console.log("Timeout function called");
-			},1000)
+		circle.on('dragend', function() { // On the end of the drag
+			console.log("Starting timeout"); //Log some shit
+			setTimeout(function(){ // Start a timer
+				circle.setStroke("red"); // At the end of the time, set the stroke to red
+				circle.setFill("yellow"); // and the fill to yellow
+				circleLayer.batchDraw(); // Then update the layer
+				setTimeout(function(){ // Set another timer
+					circle.setFill("red"); // At the end of that, make the whole circle red
+					circleLayer.batchDraw(); // And update the layer again
+				},2*60000); // 2 minutes
+			},13*60000); // 13 minutes
+//				},1000); // 1 second
+//			},1000); // 1 second
 		});
 
 		circleLayer.add(circle);
 
 		stage.add(circleLayer);
+		function NewThingy() {
+			var circle = circle.clone(); // This doesn't work yet
+			circleLayer.add(circle);
+		}
 	</script>
 		<noscript>
 			<h1>Sorry, but you need Javascript for this program to work</h1>
 		</noscript>
-		<button class="button" onclick="DrawBuildings();">Change Floors</button>
-		<button class="button" onclick="NewThingy();">Add thingy</button>
+		<button id="reset" onclick="DrawBuildings();">Change Floors</button>
+		<button id="addcircle" onclick="NewThingy();">Add thingy</button>
 		<canvas id="maincanvas">
 			<p>Your browser does not support the canvas element, sorry</p>
 		</canvas>
