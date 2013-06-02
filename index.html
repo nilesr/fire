@@ -98,10 +98,10 @@
 			}
 			function GrabFromServer() {
 				var online = navigator.onLine;
-//				if (online == true)
-				if (false)
+				if (online == true)
+//				if (false)
 				{
-					jQuery.getJSON("http://107.22.89.68:4712/api/responder/", function(json) {
+					jQuery.getJSON("http://107.22.89.68:4711/api/responder/", function(json) {
 						jQuery.each(json, function (index,unit) {
 							NewThingy(unit.unum,unit.utype);
 							RemoveAllCookies();	
@@ -272,9 +272,9 @@
 					TypeText.setText(unum + " - " + utype);
 				}
 				var StoreUnit = function(unum,utype) {
-//					if (online == true) {
-					if (false) {
-						jQuery.post("http://107.22.89.68:4712/api/responder/",{
+					if (online == true) {
+//					if (false) {
+						jQuery.post("http://107.22.89.68:4711/api/responder/",{
 							"unum": unum,
 							"utype": utype
 						});
