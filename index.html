@@ -8,13 +8,47 @@
 		<script type="text/javascript" src="http://code.jquery.com/jquery-2.0.2.js"></script>
 		<script type="text/javascript" src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 		<script type="text/javascript">
-			function DrawBuildings()
+			function GetBuildings()
 			{
-				var floors = prompt("How many floors?");
-				var rows = prompt("How many rows?");
+				$("#template-dialog").dialog({
+							
+					autoOpen: true,
+					width: "400px",
+					buttons: {
+						"Two floor house": function() {
+							$(this).dialog("close");
+							DrawBuildings(2,1);
+						},
+						"Three floor house": function() {
+							$(this).dialog("close");
+							DrawBuildings(3,1);
+						},
+						"Highrise": function() {
+							$(this).dialog("close");
+							DrawBuildings(6,1);
+						},
+						"Strip mall": function() {
+							$(this).dialog("close");
+							DrawBuildings(1,6);
+						},
+						"Townhouses": function() {
+							$(this).dialog("close");
+							DrawBuildings(3,6);
+						},
+						"Custom": function() {
+							$(this).dialog("close");
+							var floors = prompt("How many floors?");
+							var rows = prompt("How many rows?");
+							DrawBuildings(floors,rows);
+						}
+					}
+				});
+			}
+			function DrawBuildings(floors,rows) {
 				floors = Math.abs(floors);
 				canvas = document.getElementById("maincanvas");
 				canvas.height = document.height;
+				canvas.width = Math.round(document.width * 0.85);
 				var verticalpixelspace = canvas.height / floors;
 				var horizontalpixelspace = canvas.width / rows;
 				var context = canvas.getContext('2d');
@@ -62,16 +96,13 @@
 				}
 			}
 			function GrabFromServer() {
-				console.log("GrabFromServer called");
 				jQuery.getJSON("http://107.22.89.68:4711/api/responder/", function(json) {
-					console.log("Beginning iteration over each returned value");
 					jQuery.each(json, function (index,unit) {
 						NewThingy(unit.name,unit.type);	
-						console.log(unit.name + " - " + unit.type);
 					});
-					console.log("Done");
 				});
 			}
+			var units = 0;
 		</script>
 	<title>FIRe</title>
 	</head>
@@ -87,6 +118,7 @@
 		});
 		var circleLayer = new Kinetic.Layer();
 		function NewThingy(unum,utype) {
+			units = units + 1;
 			if (unum == null)
 			{
 				unum = prompt("What is this unit's number");
@@ -157,10 +189,9 @@
 					});
 				});
 			}
-			console.log("NewThingy called");
 			var circle = new Kinetic.Circle({
-				x: document.width - 25,
-				y: 25,
+				x: Math.round(document.width * 0.85),
+				y: 30 * units + 45,
 				radius: 12.5,
 				fill: 'green',
 				stroke: 'green',
@@ -169,18 +200,18 @@
 				name: 'NotDropped'
 			});
 			var TimerText = new Kinetic.Text({
-				x: document.width - 25,
-				y: 25,
-				text: 'tbr',
+				x: Math.round(document.width * 0.85),
+				y: 30 * units + 45,
+				text: '15:00',
 				fontSize: 16,
 				fontFamily: 'Calibri',
 				fill: 'black',
 				draggable: false
 			});
 			var TypeText = new Kinetic.Text({
-				x: document.width - 25,
-				y: 10,
-				text: unum,
+				x: Math.round(document.width * 0.85),
+				y: 30 * units + 30,
+				text: unum + " - " + utype,
 				fontSize: 16,
 				fontFamily: 'Calibri',
 				fill: 'black',
@@ -189,12 +220,10 @@
 			var Unit = new Kinetic.Group({
 				draggable: true
 			});
-			console.log("Circle object defined");
 			Unit.add(circle);
 			Unit.add(TimerText);
 			Unit.add(TypeText);
 			circleLayer.add(Unit);
-			console.log("Circle added to circleLayer");
 			Unit.on('dragstart', function() {
 				console.log("Drag started");
 			});
@@ -222,7 +251,6 @@
 					},13*60000); // 13 minutes
 //						},10000); // 10 seconds
 //					},10000); // 10 seconds
-					console.log("Circle dropped");
 					circle.setName("dropped");
 					var timeleft = 15*60;
 					function onUpdateTime() {
@@ -248,7 +276,6 @@
 				}
 
 			});
-			console.log("Event functions defined");
 			stage.add(circleLayer);
 			UpdateUnit(utype);
 
@@ -260,9 +287,10 @@
 		<noscript>
 			<h1>Sorry, but you need Javascript for this program to work</h1>
 		</noscript>
-		<button id="reset" onclick="DrawBuildings();">Change Floors</button>
+		<button id="reset" onclick="GetBuildings();">Change Floors</button>
 		<button id="addcircle" onclick="NewThingy(null,null);">Add unit</button>
 		<div id="reset-dialog" title="prompt"><p>What kind of unit</p></div>
+		<div id="template-dialog" title="prompt"><p>What kind of house</p></div>
 		<canvas id="maincanvas">
 			<p>Your browser does not support the canvas element, sorry</p>
 		</canvas>

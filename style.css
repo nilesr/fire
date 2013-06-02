@@ -26,3 +26,9 @@ padding: 0px;
 	right:0%;
 	top:0%;
 }
+#reset-dialog {
+	display: none;
+}
+#template-dialog {
+	display: none;
+}
