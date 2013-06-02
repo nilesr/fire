@@ -5,7 +5,6 @@
 		<meta name="apple-mobile-web-app-capable" content="yes" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 		<script type="text/javascript" defer="defer">
-			var timeleft = null;
 			function DrawBuildings()
 			{
 				var floors = prompt("How many floors?");
@@ -82,7 +81,7 @@
 				fill: 'green',
 				stroke: 'green',
 				strokeWidth: 4,
-				draggable: true,
+				draggable: false,
 				name: 'NotDropped'
 			});
 			var TimerText = new Kinetic.Text({
@@ -92,18 +91,24 @@
 				fontSize: 25,
 				fontFamily: 'Calibri',
 				fill: 'black',
+				draggable: false
+			});
+			var Unit = new Kinetic.Group({
 				draggable: true
 			});
 			console.log("Circle object defined");
-			circleLayer.add(circle);
-			circleLayer.add(TimerText);
+			Unit.add(circle);
+			Unit.add(TimerText);
+//			circleLayer.add(circle);
+//			circleLayer.add(TimerText);
+			circleLayer.add(Unit);
 			console.log("Circle added to circleLayer");
-			circle.on('dragstart', function() {
+			Unit.on('dragstart', function() {
 				console.log("Drag started");
 			});
 			
 
-			circle.on('dragend', function() { // On the end of the drag
+			Unit.on('dragend', function() { // On the end of the drag
 				if (circle.getName() != "dropped") {
 					setTimeout(function(){ // Start a timer
 						circle.setStroke("red"); // At the end of the time, set the stroke to red
@@ -112,13 +117,13 @@
 						setTimeout(function(){ // Set another timer
 							circle.setFill("red"); // At the end of that, make the whole circle red
 							circleLayer.batchDraw(); // And update the layer again
-						},2*60000); // 2 minutes
-					},13*60000); // 13 minutes
-//						},10000); // 10 seconds
-//					},10000); // 10 seconds
+//						},2*60000); // 2 minutes
+//					},13*60000); // 13 minutes
+						},1000); // 10 seconds
+					},1000); // 10 seconds
 					console.log("Circle dropped");
 					circle.setName("dropped");
-					timeleft = 15*60;
+					var timeleft = 15*60;
 					function onUpdateTime() {
 						var date = new Date();
 						if ((timeleft % 60).toString().length != 1)
