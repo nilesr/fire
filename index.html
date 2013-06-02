@@ -61,10 +61,21 @@
 					tempfloors = tempfloors + 1;
 				}
 			}
+			function GrabFromServer() {
+				console.log("GrabFromServer called");
+				jQuery.getJSON("http://server:4711/api/responder/", function(json) {
+					console.log("Beginning iteration over each returned value");
+					jQuery.each(json, function (index,unit) {
+						NewThingy(unit.name,unit.type);	
+						console.log(unit.name + " - " + unit.type);
+					});
+					console.log("Done");
+				});
+			}
 		</script>
 	<title>FIRe</title>
 	</head>
-	<body id="body">
+	<body id="body" onLoad="GrabFromServer();">
 	<div id="container"></div>
 	<script src="http://d3lp1msu2r81bx.cloudfront.net/kjs/js/lib/kinetic-v4.5.3.min.js"></script>
 	<script defer="defer">
@@ -75,53 +86,77 @@
 			height: document.height
 		});
 		var circleLayer = new Kinetic.Layer();
-		function NewThingy() {
-			var unum = prompt("What is this unit's number");
-			$(function() {
-				$("#reset-dialog").dialog({
-					autoOpen: true,
-					width: "400px",
-					buttons: {
-						"Fire truck": function() {
-							var utype = "Fire truck";
-							$(this).dialog("close");
-						},
-						"Fire engine": function() {
-							var utype = "Fire engine";
-							$(this).dialog("close");
-						},
-						"Rescue unit": function() {
-							var utype = "Rescue unit";
-							$(this).dialog("close");
-						},
-						"Medic": function() {
-							var utype = "Medic";
-							$(this).dialog("close");
-						},
-						"Battalion chief": function() {
-							var utype = "Battalion chief";
-							$(this).dialog("close");
-						},
-						"EMS superviser": function() {
-							var utype = "EMS superviser";
-							$(this).dialog("close");
-						},
-						"Bomb unit": function() {
-							var utype = "Bomb unit";
-							$(this).dialog("close");
-						},
-						"Hazmat team": function() {
-							var utype = "Hazmat team";
-							$(this).dialog("close");
-						},
-						"Special operations chief": function() {
-							var utype = "Special operations chief";
-							$(this).dialog("close");
+		function NewThingy(unum,utype) {
+			if (unum == null)
+			{
+				unum = prompt("What is this unit's number");
+			}
+			if (utype == null)
+			{
+				$(function() {
+					$("#reset-dialog").dialog({
+						autoOpen: true,
+						width: "400px",
+						buttons: {
+							"Fire truck": function() {
+								utype = "Fire truck";
+								$(this).dialog("close");
+								UpdateUnit(utype);
+								StoreUnit(unum,utype);
+							},
+							"Fire engine": function() {
+								utype = "Fire engine";
+								$(this).dialog("close");
+								UpdateUnit(utype);
+								StoreUnit(unum,utype);
+							},
+							"Rescue unit": function() {
+								utype = "Rescue unit";
+								$(this).dialog("close");
+								UpdateUnit(utype);
+								StoreUnit(unum,utype);
+							},
+							"Medic": function() {
+								utype = "Medic";
+								$(this).dialog("close");
+								UpdateUnit(utype);
+								StoreUnit(unum,utype);
+							},
+							"Battalion chief": function() {
+								utype = "Battalion chief";
+								$(this).dialog("close");
+								UpdateUnit(utype);
+								StoreUnit(unum,utype);
+							},
+							"EMS superviser": function() {
+								utype = "EMS superviser";
+								$(this).dialog("close");
+								UpdateUnit(utype);
+								StoreUnit(unum,utype);
+							},
+							"Bomb unit": function() {
+								utype = "Bomb unit";
+								$(this).dialog("close");
+								UpdateUnit(utype);
+								StoreUnit(unum,utype);
+							},
+							"Hazmat team": function() {
+								utype = "Hazmat team";
+								$(this).dialog("close");
+								UpdateUnit(utype);
+								StoreUnit(unum,utype);
+							},
+							"Special operations chief": function() {
+								utype = "Special operations chief";
+								$(this).dialog("close");
+								UpdateUnit(utype);
+								StoreUnit(unum,utype);
+							}
 						}
-					}
 
+					});
 				});
-			});
+			}
 			console.log("NewThingy called");
 			var circle = new Kinetic.Circle({
 				x: document.width - 25,
@@ -137,7 +172,16 @@
 				x: document.width - 25,
 				y: 25,
 				text: 'tbr',
-				fontSize: 25,
+				fontSize: 16,
+				fontFamily: 'Calibri',
+				fill: 'black',
+				draggable: false
+			});
+			var TypeText = new Kinetic.Text({
+				x: document.width - 25,
+				y: 10,
+				text: unum,
+				fontSize: 16,
 				fontFamily: 'Calibri',
 				fill: 'black',
 				draggable: false
@@ -148,11 +192,21 @@
 			console.log("Circle object defined");
 			Unit.add(circle);
 			Unit.add(TimerText);
+			Unit.add(TypeText);
 			circleLayer.add(Unit);
 			console.log("Circle added to circleLayer");
 			Unit.on('dragstart', function() {
 				console.log("Drag started");
 			});
+			var UpdateUnit = function(utype){
+				TypeText.setText(unum + " - " + utype);
+			}
+			var StoreUnit = function(unum,utype) {
+				jQuery.post("http://server:4711/api/responder/",{
+					"name": unum,
+					"type": utype
+				});
+			}
 			
 
 			Unit.on('dragend', function() { // On the end of the drag
@@ -196,6 +250,7 @@
 			});
 			console.log("Event functions defined");
 			stage.add(circleLayer);
+			UpdateUnit(utype);
 
 		}
 
@@ -206,7 +261,7 @@
 			<h1>Sorry, but you need Javascript for this program to work</h1>
 		</noscript>
 		<button id="reset" onclick="DrawBuildings();">Change Floors</button>
-		<button id="addcircle" onclick="NewThingy();">Add unit</button>
+		<button id="addcircle" onclick="NewThingy(null,null);">Add unit</button>
 		<div id="reset-dialog" title="prompt"><p>What kind of unit</p></div>
 		<canvas id="maincanvas">
 			<p>Your browser does not support the canvas element, sorry</p>
