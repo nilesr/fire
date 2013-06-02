@@ -7,6 +7,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 		<script type="text/javascript" src="http://code.jquery.com/jquery-2.0.2.js"></script>
 		<script type="text/javascript" src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+		<script src="http://d3lp1msu2r81bx.cloudfront.net/kjs/js/lib/kinetic-v4.5.3.min.js"></script>
 		<script type="text/javascript">
 			function GetBuildings()
 			{
@@ -100,10 +101,11 @@
 //				if (online == true)
 				if (false)
 				{
-					jQuery.getJSON("http://107.22.89.68:4711/api/responder/", function(json) {
+					jQuery.getJSON("http://107.22.89.68:4712/api/responder/", function(json) {
 						jQuery.each(json, function (index,unit) {
-							NewThingy(unit.name,unit.type);	
-							AddToCookie(unit.name,unit.type);
+							NewThingy(unit.unum,unit.utype);
+							RemoveAllCookies();	
+							AddToCookie(unit.unum,unit.utype);
 						});
 					});
 				}
@@ -111,225 +113,225 @@
 				{
 					jQuery.each(ReadFromCookie(), function (index,unit) {
 						NewThingy(unit.name,unit.type);	
-						AddToCookie(unit.name,unit.type);
 					});
 					DisplayWarning();
 				}
 			}
-			function AddToCookie() {
+			function RemoveAllCookies() {
 				
+			}
+			function AddToCookie(unum,utype) {
+				$.cookie(unum, unum + utype)
 			}
 			function ReadFromCookie() {
 				return [
 					{
 					"name": "101",
-					"type": "EMS superviser",
-					"_id": "51ab8a841fa55d7671000001",
-					"__v": 0
+					"type": "EMS superviser"
 					},
 					{
-					"name": "12",
-					"type": "Fire engine",
-					"_id": "51abad621fa55d7671000008",
-					"__v": 0
+					"name": "102",
+					"type": "Fire engine"
 					}
 				]
 			}
 			function DisplayWarning() {
-				var para=document.createElement("p");
-				var node=document.createTextNode("WARNING! You are not connected to the internet,<br /> the data here is cached and not synced between devices");
-				para.appendChild(node);
-//				var body = getElementById('body');
-				document.appendChild(para);
+				$("#warning").append("<h2 style=\"font-variant:small-caps;\">WARNING: You are not connected to the internet<br />Units are NOT being synced.</h2>");
 			}
 			var units = 0;
 		</script>
 	<title>FIRe</title>
 	</head>
 	<body id="body" onLoad="GrabFromServer();">
-	<div id="container"></div>
-	<script src="http://d3lp1msu2r81bx.cloudfront.net/kjs/js/lib/kinetic-v4.5.3.min.js"></script>
-	<script defer="defer">
+		<div id="container"></div>
+		<script defer="defer">
 
-		var stage = new Kinetic.Stage({
-			container: 'container',
-			width: document.width,
-			height: document.height
-		});
-		var circleLayer = new Kinetic.Layer();
-		function NewThingy(unum,utype) {
-			units = units + 1;
-			if (unum == null)
-			{
-				unum = prompt("What is this unit's number");
-			}
-			if (utype == null)
-			{
-				$(function() {
-					$("#reset-dialog").dialog({
-						autoOpen: true,
-						width: "400px",
-						buttons: {
-							"Fire truck": function() {
-								utype = "Fire truck";
-								$(this).dialog("close");
-								UpdateUnit(utype);
-								StoreUnit(unum,utype);
-							},
-							"Fire engine": function() {
-								utype = "Fire engine";
-								$(this).dialog("close");
-								UpdateUnit(utype);
-								StoreUnit(unum,utype);
-							},
-							"Rescue unit": function() {
-								utype = "Rescue unit";
-								$(this).dialog("close");
-								UpdateUnit(utype);
-								StoreUnit(unum,utype);
-							},
-							"Medic": function() {
-								utype = "Medic";
-								$(this).dialog("close");
-								UpdateUnit(utype);
-								StoreUnit(unum,utype);
-							},
-							"Battalion chief": function() {
-								utype = "Battalion chief";
-								$(this).dialog("close");
-								UpdateUnit(utype);
-								StoreUnit(unum,utype);
-							},
-							"EMS superviser": function() {
-								utype = "EMS superviser";
-								$(this).dialog("close");
-								UpdateUnit(utype);
-								StoreUnit(unum,utype);
-							},
-							"Bomb unit": function() {
-								utype = "Bomb unit";
-								$(this).dialog("close");
-								UpdateUnit(utype);
-								StoreUnit(unum,utype);
-							},
-							"Hazmat team": function() {
-								utype = "Hazmat team";
-								$(this).dialog("close");
-								UpdateUnit(utype);
-								StoreUnit(unum,utype);
-							},
-							"Special operations chief": function() {
-								utype = "Special operations chief";
-								$(this).dialog("close");
-								UpdateUnit(utype);
-								StoreUnit(unum,utype);
-							},
-							"Custom": function() {
-								utype = prompt("Enter the unit name");
-								$(this).dialog("close");
-								UpdateUnit(utype);
-								StoreUnit(unum,utype);
+			var stage = new Kinetic.Stage({
+				container: 'container',
+				width: document.width,
+				height: document.height
+			});
+			var circleLayer = new Kinetic.Layer();
+			function NewThingy(unum,utype) {
+				units = units + 1;
+				if (unum == null)
+				{
+					unum = prompt("What is this unit's number");
+				}
+				if (utype == null)
+				{
+					$(function() {
+						$("#reset-dialog").dialog({
+							autoOpen: true,
+							width: "400px",
+							buttons: {
+								"Fire truck": function() {
+									utype = "Fire truck";
+									$(this).dialog("close");
+									UpdateUnit(utype);
+									StoreUnit(unum,utype);
+								},
+								"Fire engine": function() {
+									utype = "Fire engine";
+									$(this).dialog("close");
+									UpdateUnit(utype);
+									StoreUnit(unum,utype);
+								},
+								"Rescue unit": function() {
+									utype = "Rescue unit";
+									$(this).dialog("close");
+									UpdateUnit(utype);
+									StoreUnit(unum,utype);
+								},
+								"Medic": function() {
+									utype = "Medic";
+									$(this).dialog("close");
+									UpdateUnit(utype);
+									StoreUnit(unum,utype);
+								},
+								"Battalion chief": function() {
+									utype = "Battalion chief";
+									$(this).dialog("close");
+									UpdateUnit(utype);
+									StoreUnit(unum,utype);
+								},
+								"EMS superviser": function() {
+									utype = "EMS superviser";
+									$(this).dialog("close");
+									UpdateUnit(utype);
+									StoreUnit(unum,utype);
+								},
+								"Bomb unit": function() {
+									utype = "Bomb unit";
+									$(this).dialog("close");
+									UpdateUnit(utype);
+									StoreUnit(unum,utype);
+								},
+								"Hazmat team": function() {
+									utype = "Hazmat team";
+									$(this).dialog("close");
+									UpdateUnit(utype);
+									StoreUnit(unum,utype);
+								},
+								"Special operations chief": function() {
+									utype = "Special operations chief";
+									$(this).dialog("close");
+									UpdateUnit(utype);
+									StoreUnit(unum,utype);
+								},
+								"Custom": function() {
+									utype = prompt("Enter the unit name");
+									$(this).dialog("close");
+									UpdateUnit(utype);
+									StoreUnit(unum,utype);
+								}
 							}
-						}
 
+						});
 					});
+				}
+				var circle = new Kinetic.Circle({
+					x: Math.round(document.width * 0.85),
+					y: 30 * units + 45,
+					radius: 12.5,
+					fill: 'green',
+					stroke: 'green',
+					strokeWidth: 4,
+					draggable: false,
+					name: 'NotDropped'
 				});
-			}
-			var circle = new Kinetic.Circle({
-				x: Math.round(document.width * 0.85),
-				y: 30 * units + 45,
-				radius: 12.5,
-				fill: 'green',
-				stroke: 'green',
-				strokeWidth: 4,
-				draggable: false,
-				name: 'NotDropped'
-			});
-			var TimerText = new Kinetic.Text({
-				x: Math.round(document.width * 0.85),
-				y: 30 * units + 45,
-				text: '15:00',
-				fontSize: 16,
-				fontFamily: 'Calibri',
-				fill: 'black',
-				draggable: false
-			});
-			var TypeText = new Kinetic.Text({
-				x: Math.round(document.width * 0.85),
-				y: 30 * units + 30,
-				text: unum + " - " + utype,
-				fontSize: 16,
-				fontFamily: 'Calibri',
-				fill: 'black',
-				draggable: false
-			});
-			var Unit = new Kinetic.Group({
-				draggable: true
-			});
-			Unit.add(circle);
-			Unit.add(TimerText);
-			Unit.add(TypeText);
-			circleLayer.add(Unit);
-			Unit.on('dragstart', function() {
-				console.log("Drag started");
-			});
-			var UpdateUnit = function(utype){
-				TypeText.setText(unum + " - " + utype);
-			}
-			var StoreUnit = function(unum,utype) {
-				jQuery.post("http://107.22.89.68:4711/api/responder/",{
-					"name": unum,
-					"type": utype
+				var TimerText = new Kinetic.Text({
+					x: Math.round(document.width * 0.85),
+					y: 30 * units + 45,
+					text: '15:00',
+					fontSize: 16,
+					fontFamily: 'Calibri',
+					fill: 'black',
+					draggable: false
 				});
-			}
+				var TypeText = new Kinetic.Text({
+					x: Math.round(document.width * 0.85),
+					y: 30 * units + 30,
+					text: unum + " - " + utype,
+					fontSize: 16,
+					fontFamily: 'Calibri',
+					fill: 'black',
+					draggable: false
+				});
+				var Unit = new Kinetic.Group({
+					draggable: true
+				});
+				Unit.add(circle);
+				Unit.add(TimerText);
+				Unit.add(TypeText);
+				circleLayer.add(Unit);
+				Unit.on('dragstart', function() {
+					console.log("Drag started");
+				});
+				var UpdateUnit = function(utype){
+					TypeText.setText(unum + " - " + utype);
+				}
+				var StoreUnit = function(unum,utype) {
+//					if (online == true) {
+					if (false) {
+						jQuery.post("http://107.22.89.68:4712/api/responder/",{
+							"unum": unum,
+							"utype": utype
+						});
+					}
+					else
+					{
+						AddToCookie(unum,utype)
+					}
+				}
 			
 
-			Unit.on('dragend', function() { // On the end of the drag
-				if (circle.getName() != "dropped") {
-					setTimeout(function(){ // Start a timer
-						circle.setStroke("red"); // At the end of the time, set the stroke to red
-						circle.setFill("yellow"); // and the fill to yellow
-						circleLayer.batchDraw(); // Then update the layer
-						setTimeout(function(){ // Set another timer
-							circle.setFill("red"); // At the end of that, make the whole circle red
-							circleLayer.batchDraw(); // And update the layer again
-						},2*60000); // 2 minutes
-					},13*60000); // 13 minutes
-//						},10000); // 10 seconds
-//					},10000); // 10 seconds
-					circle.setName("dropped");
-					var timeleft = 15*60;
-					function onUpdateTime() {
-						var date = new Date();
-						if ((timeleft % 60).toString().length != 1)
-						{
-							TimerText.setText(Math.floor(timeleft / 60) + ":" + timeleft % 60);
+				Unit.on('dragend', function() { // On the end of the drag
+					if (circle.getName() != "dropped") {
+						setTimeout(function(){ // Start a timer
+							circle.setStroke("red"); // At the end of the time, set the stroke to red
+							circle.setFill("yellow"); // and the fill to yellow
+							circleLayer.batchDraw(); // Then update the layer
+							setTimeout(function(){ // Set another timer
+								circle.setFill("red"); // At the end of that, make the whole circle red
+								circleLayer.batchDraw(); // And update the layer again
+							},2*60000); // 2 minutes
+						},13*60000); // 13 minutes
+	//						},10000); // 10 seconds
+	//					},10000); // 10 seconds
+						circle.setName("dropped");
+						var timeleft = 15*60;
+						function onUpdateTime() {
+							var date = new Date();
+							if ((timeleft % 60).toString().length != 1)
+							{
+								TimerText.setText(Math.floor(timeleft / 60) + ":" + timeleft % 60);
+							}
+							else
+							{
+								TimerText.setText(Math.floor(timeleft / 60) + ":0" + timeleft % 60);
+							}
+							timeleft = timeleft - 1;
+							// layer.draw(); // either this, or whatever the layer is called
+							// TimerText.getParent().draw(); // or this, auto get parent layer
+							TimerText.getLayer().draw(); // better solution suggested by Eric Rowell
 						}
-						else
-						{
-							TimerText.setText(Math.floor(timeleft / 60) + ":0" + timeleft % 60);
-						}
-						timeleft = timeleft - 1;
-						// layer.draw(); // either this, or whatever the layer is called
-						// TimerText.getParent().draw(); // or this, auto get parent layer
-						TimerText.getLayer().draw(); // better solution suggested by Eric Rowell
+						setInterval(function () { onUpdateTime() }, 1000);
 					}
-					setInterval(function () { onUpdateTime() }, 1000);
-				}
-				else
-				{
-					;
-				}
+					else
+					{
+						;
+					}
 
-			});
+				});
+				stage.add(circleLayer);
+				UpdateUnit(utype);
+
+			}
+
 			stage.add(circleLayer);
-			UpdateUnit(utype);
 
-		}
-
-		stage.add(circleLayer);
-
-	</script>
+		</script>
 		<noscript>
 			<h1>Sorry, but you need Javascript for this program to work</h1>
 		</noscript>
@@ -340,5 +342,6 @@
 		<canvas id="maincanvas">
 			<p>Your browser does not support the canvas element, sorry</p>
 		</canvas>
+		<div id="warning"></div>
 	</body>
 </html>
