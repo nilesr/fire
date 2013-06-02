@@ -63,7 +63,7 @@
 			}
 			function GrabFromServer() {
 				console.log("GrabFromServer called");
-				jQuery.getJSON("http://server:4711/api/responder/", function(json) {
+				jQuery.getJSON("http://107.22.89.68:4711/api/responder/", function(json) {
 					console.log("Beginning iteration over each returned value");
 					jQuery.each(json, function (index,unit) {
 						NewThingy(unit.name,unit.type);	
@@ -202,7 +202,7 @@
 				TypeText.setText(unum + " - " + utype);
 			}
 			var StoreUnit = function(unum,utype) {
-				jQuery.post("http://server:4711/api/responder/",{
+				jQuery.post("http://107.22.89.68:4711/api/responder/",{
 					"name": unum,
 					"type": utype
 				});
