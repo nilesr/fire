@@ -2,9 +2,12 @@
 <html>
 	<head>
 		<link rel="stylesheet" href="style.css">
+		<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
 		<meta name="apple-mobile-web-app-capable" content="yes" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-		<script type="text/javascript" defer="defer">
+		<script type="text/javascript" src="http://code.jquery.com/jquery-2.0.2.js"></script>
+		<script type="text/javascript" src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+		<script type="text/javascript">
 			function DrawBuildings()
 			{
 				var floors = prompt("How many floors?");
@@ -73,6 +76,52 @@
 		});
 		var circleLayer = new Kinetic.Layer();
 		function NewThingy() {
+			var unum = prompt("What is this unit's number");
+			$(function() {
+				$("#reset-dialog").dialog({
+					autoOpen: true,
+					width: "400px",
+					buttons: {
+						"Fire truck": function() {
+							var utype = "Fire truck";
+							$(this).dialog("close");
+						},
+						"Fire engine": function() {
+							var utype = "Fire engine";
+							$(this).dialog("close");
+						},
+						"Rescue unit": function() {
+							var utype = "Rescue unit";
+							$(this).dialog("close");
+						},
+						"Medic": function() {
+							var utype = "Medic";
+							$(this).dialog("close");
+						},
+						"Battalion chief": function() {
+							var utype = "Battalion chief";
+							$(this).dialog("close");
+						},
+						"EMS superviser": function() {
+							var utype = "EMS superviser";
+							$(this).dialog("close");
+						},
+						"Bomb unit": function() {
+							var utype = "Bomb unit";
+							$(this).dialog("close");
+						},
+						"Hazmat team": function() {
+							var utype = "Hazmat team";
+							$(this).dialog("close");
+						},
+						"Special operations chief": function() {
+							var utype = "Special operations chief";
+							$(this).dialog("close");
+						}
+					}
+
+				});
+			});
 			console.log("NewThingy called");
 			var circle = new Kinetic.Circle({
 				x: document.width - 25,
@@ -99,8 +148,6 @@
 			console.log("Circle object defined");
 			Unit.add(circle);
 			Unit.add(TimerText);
-//			circleLayer.add(circle);
-//			circleLayer.add(TimerText);
 			circleLayer.add(Unit);
 			console.log("Circle added to circleLayer");
 			Unit.on('dragstart', function() {
@@ -117,10 +164,10 @@
 						setTimeout(function(){ // Set another timer
 							circle.setFill("red"); // At the end of that, make the whole circle red
 							circleLayer.batchDraw(); // And update the layer again
-//						},2*60000); // 2 minutes
-//					},13*60000); // 13 minutes
-						},1000); // 10 seconds
-					},1000); // 10 seconds
+						},2*60000); // 2 minutes
+					},13*60000); // 13 minutes
+//						},10000); // 10 seconds
+//					},10000); // 10 seconds
 					console.log("Circle dropped");
 					circle.setName("dropped");
 					var timeleft = 15*60;
@@ -160,6 +207,7 @@
 		</noscript>
 		<button id="reset" onclick="DrawBuildings();">Change Floors</button>
 		<button id="addcircle" onclick="NewThingy();">Add unit</button>
+		<div id="reset-dialog" title="prompt"><p>What kind of unit</p></div>
 		<canvas id="maincanvas">
 			<p>Your browser does not support the canvas element, sorry</p>
 		</canvas>
