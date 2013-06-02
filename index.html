@@ -5,7 +5,7 @@
 		<meta name="apple-mobile-web-app-capable" content="yes" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 		<script type="text/javascript" defer="defer">
-
+			var timeleft = null;
 			function DrawBuildings()
 			{
 				var floors = prompt("How many floors?");
@@ -85,12 +85,24 @@
 				draggable: true,
 				name: 'NotDropped'
 			});
+			var TimerText = new Kinetic.Text({
+				x: document.width - 25,
+				y: 25,
+				text: 'tbr',
+				fontSize: 25,
+				fontFamily: 'Calibri',
+				fill: 'black',
+				draggable: true
+			});
 			console.log("Circle object defined");
 			circleLayer.add(circle);
+			circleLayer.add(TimerText);
 			console.log("Circle added to circleLayer");
 			circle.on('dragstart', function() {
 				console.log("Drag started");
 			});
+			
+
 			circle.on('dragend', function() { // On the end of the drag
 				if (circle.getName() != "dropped") {
 					setTimeout(function(){ // Start a timer
@@ -106,11 +118,29 @@
 //					},10000); // 10 seconds
 					console.log("Circle dropped");
 					circle.setName("dropped");
+					timeleft = 15*60;
+					function onUpdateTime() {
+						var date = new Date();
+						if ((timeleft % 60).toString().length != 1)
+						{
+							TimerText.setText(Math.floor(timeleft / 60) + ":" + timeleft % 60);
+						}
+						else
+						{
+							TimerText.setText(Math.floor(timeleft / 60) + ":0" + timeleft % 60);
+						}
+						timeleft = timeleft - 1;
+						// layer.draw(); // either this, or whatever the layer is called
+						// TimerText.getParent().draw(); // or this, auto get parent layer
+						TimerText.getLayer().draw(); // better solution suggested by Eric Rowell
+					}
+					setInterval(function () { onUpdateTime() }, 1000);
 				}
 				else
 				{
 					;
 				}
+
 			});
 			console.log("Event functions defined");
 			stage.add(circleLayer);
@@ -118,6 +148,7 @@
 		}
 
 		stage.add(circleLayer);
+
 	</script>
 		<noscript>
 			<h1>Sorry, but you need Javascript for this program to work</h1>
