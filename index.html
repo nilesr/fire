@@ -183,6 +183,12 @@
 								$(this).dialog("close");
 								UpdateUnit(utype);
 								StoreUnit(unum,utype);
+							},
+							"Custom": function() {
+								utype = prompt("Enter the unit name");
+								$(this).dialog("close");
+								UpdateUnit(utype);
+								StoreUnit(unum,utype);
 							}
 						}
 
