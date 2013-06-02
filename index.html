@@ -96,11 +96,51 @@
 				}
 			}
 			function GrabFromServer() {
-				jQuery.getJSON("http://107.22.89.68:4711/api/responder/", function(json) {
-					jQuery.each(json, function (index,unit) {
-						NewThingy(unit.name,unit.type);	
+				var online = navigator.onLine;
+//				if (online == true)
+				if (false)
+				{
+					jQuery.getJSON("http://107.22.89.68:4711/api/responder/", function(json) {
+						jQuery.each(json, function (index,unit) {
+							NewThingy(unit.name,unit.type);	
+							AddToCookie(unit.name,unit.type);
+						});
 					});
-				});
+				}
+				else
+				{
+					jQuery.each(ReadFromCookie(), function (index,unit) {
+						NewThingy(unit.name,unit.type);	
+						AddToCookie(unit.name,unit.type);
+					});
+					DisplayWarning();
+				}
+			}
+			function AddToCookie() {
+				
+			}
+			function ReadFromCookie() {
+				return [
+					{
+					"name": "101",
+					"type": "EMS superviser",
+					"_id": "51ab8a841fa55d7671000001",
+					"__v": 0
+					},
+					{
+					"name": "12",
+					"type": "Fire engine",
+					"_id": "51abad621fa55d7671000008",
+					"__v": 0
+					}
+				]
+			}
+			function DisplayWarning() {
+				var para=document.createElement("p");
+				var node=document.createTextNode("WARNING! You are not connected to the internet,<br /> the data here is cached and not synced between devices");
+				para.appendChild(node);
+//				var body = getElementById('body');
+				document.appendChild(para);
 			}
 			var units = 0;
 		</script>

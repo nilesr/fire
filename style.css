@@ -32,3 +32,9 @@ padding: 0px;
 #template-dialog {
 	display: none;
 }
+#warning {
+	background-color:red;
+	position:absolute;
+	right:0px;
+	bottom:0px;
+}
