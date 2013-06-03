@@ -12,7 +12,7 @@
 			function GetBuildings()
 			{
 				$("#template-dialog").dialog({
-							
+					title: "Please select a type",
 					autoOpen: true,
 					width: "400px",
 					buttons: {
@@ -98,6 +98,7 @@
 			}
 			function GrabFromServer() {
 				var online = navigator.onLine;
+				console.log("online");
 				if (online == true)
 //				if (false)
 				{
@@ -119,8 +120,13 @@
 					DisplayWarning();
 				}
 			}
-			function RemoveAllCookies() {
-				
+			function RemoveAllCookies() {				
+				var cookies = document.cookie.split(";");
+				for(var i=0; i < cookies.length; i++) {
+					var equals = cookies[i].indexOf("=");
+					var name = equals > -1 ? cookies[i].substr(0, equals) : cookies[i];
+					document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+				}
 			}
 			function AddToCookie(unum,utype) {
 				$.cookie(unum, unum + utype)
@@ -164,6 +170,7 @@
 				{
 					$(function() {
 						$("#reset-dialog").dialog({
+							title: "Please select a type",
 							autoOpen: true,
 							width: "400px",
 							buttons: {
