@@ -97,41 +97,36 @@
 				}
 			}
 			function GrabFromServer() {
-				var online = navigator.onLine;
-				console.log("online");
-				if (online == true)
-//				if (false)
+//				if (navigator.onLine == true)
+				if (false)
 				{
 					jQuery.getJSON("http://107.22.89.68:4711/api/responder/", function(json) {
 						jQuery.each(json, function (index,unit) {
 							var unum = unit.name;
 							var utype = unit.type;
 							NewThingy(unum,utype);
-							RemoveAllCookies();	
-							AddToCookie(unum,utype);
+							ClearStorage();	
+							AddToStorage(unum,utype);
 						});
 					});
 				}
 				else
 				{
-					jQuery.each(ReadFromCookie(), function (index,unit) {
-						NewThingy(unit.name,unit.type);	
-					});
+					while (units < localStorage.length) {
+						var storedunit = localStorage.getItem(units);
+						var storedunitarray = storedunit.split(":",2);
+						NewThingy(storedunitarray[0],storedunitarray[1]);
+					}
 					DisplayWarning();
 				}
 			}
-			function RemoveAllCookies() {				
-				var cookies = document.cookie.split(";");
-				for(var i=0; i < cookies.length; i++) {
-					var equals = cookies[i].indexOf("=");
-					var name = equals > -1 ? cookies[i].substr(0, equals) : cookies[i];
-					document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
-				}
+			function ClearStorage() {				
+				localStorage.clear()
 			}
-			function AddToCookie(unum,utype) {
-				//$.cookie(unum, unum + utype)
+			function AddToStorage(units,unum,utype) {
+				localStorage.setItem(units, unum + ":" + utype)
 			}
-			function ReadFromCookie() {
+			function ReadFromStorage() {
 				return [
 					{
 					"name": "101",
@@ -275,22 +270,23 @@
 				Unit.add(TypeText);
 				circleLayer.add(Unit);
 				Unit.on('dragstart', function() {
-					console.log("Drag started");
+					
 				});
 				var UpdateUnit = function(utype){
 					TypeText.setText(unum + " - " + utype);
 				}
 				var StoreUnit = function(unum,utype) {
-					if (online == true) {
-//					if (false) {
+//					if (navigator.onLine == true) {
+					if (false) {
 						jQuery.post("http://107.22.89.68:4711/api/responder/",{
 							"name": unum,
 							"type": utype
 						});
+						AddToStorage(unum,utype);
 					}
 					else
 					{
-						AddToCookie(unum,utype)
+						AddToStorage(units,unum,utype);
 					}
 				}
 			
@@ -321,15 +317,13 @@
 								TimerText.setText(Math.floor(timeleft / 60) + ":0" + timeleft % 60);
 							}
 							timeleft = timeleft - 1;
-							// layer.draw(); // either this, or whatever the layer is called
-							// TimerText.getParent().draw(); // or this, auto get parent layer
-							TimerText.getLayer().draw(); // better solution suggested by Eric Rowell
+							TimerText.getLayer().draw();
 						}
 						setInterval(function () { onUpdateTime() }, 1000);
 					}
 					else
 					{
-						;
+						
 					}
 
 				});
