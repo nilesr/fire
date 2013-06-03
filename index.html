@@ -98,15 +98,15 @@
 			}
 			var units = 0;
 			function GrabFromServer() {
-//				if (navigator.onLine == true)
-				if (false)
+				if (navigator.onLine == true)
+//				if (false)
 				{
 					jQuery.getJSON("http://107.22.89.68:4711/api/responder/", function(json) {
+						ClearStorage();	
 						jQuery.each(json, function (index,unit) {
 							var unum = unit.name;
 							var utype = unit.type;
 							NewThingy(unum,utype);
-							ClearStorage();	
 							AddToStorage(units,unum,utype);
 						});
 					});
@@ -264,8 +264,8 @@
 					TypeText.setText(unum + " - " + utype);
 				}
 				var StoreUnit = function(unum,utype) {
-//					if (navigator.onLine == true) {
-					if (false) {
+					if (navigator.onLine == true) {
+//					if (false) {
 						jQuery.post("http://107.22.89.68:4711/api/responder/",{
 							"name": unum,
 							"type": utype
