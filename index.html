@@ -125,6 +125,8 @@
 				localStorage.clear()
 			}
 			function AddToStorage(units,unum,utype) {
+				unum = unum.replace(/[^a-zA-Z0-9_-]/g,'');
+				utype = utype.replace(/[^a-zA-Z0-9_ -]/g,'');
 				localStorage.setItem(units - 1, unum + ":" + utype)
 			}
 			function DisplayWarning() {
