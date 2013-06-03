@@ -126,18 +126,6 @@
 			function AddToStorage(units,unum,utype) {
 				localStorage.setItem(units, unum + ":" + utype)
 			}
-			function ReadFromStorage() {
-				return [
-					{
-					"name": "101",
-					"type": "EMS superviser"
-					},
-					{
-					"name": "102",
-					"type": "Fire engine"
-					}
-				]
-			}
 			function DisplayWarning() {
 				$("#warning").append("<h2 style=\"font-variant:small-caps;\">WARNING: You are not connected to the internet<br />Units are NOT being synced.</h2>");
 			}
