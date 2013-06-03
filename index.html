@@ -96,6 +96,7 @@
 					tempfloors = tempfloors + 1;
 				}
 			}
+			var units = 0;
 			function GrabFromServer() {
 //				if (navigator.onLine == true)
 				if (false)
@@ -124,12 +125,11 @@
 				localStorage.clear()
 			}
 			function AddToStorage(units,unum,utype) {
-				localStorage.setItem(units, unum + ":" + utype)
+				localStorage.setItem(units - 1, unum + ":" + utype)
 			}
 			function DisplayWarning() {
 				$("#warning").append("<h2 style=\"font-variant:small-caps;\">WARNING: You are not connected to the internet<br />Units are NOT being synced.</h2>");
 			}
-			var units = 0;
 		</script>
 	<title>FIRe</title>
 	</head>
