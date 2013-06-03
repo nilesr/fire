@@ -103,9 +103,11 @@
 				{
 					jQuery.getJSON("http://107.22.89.68:4711/api/responder/", function(json) {
 						jQuery.each(json, function (index,unit) {
-							NewThingy(unit.unum,unit.utype);
+							var unum = unit.name;
+							var utype = unit.type;
+							NewThingy(unum,utype);
 							RemoveAllCookies();	
-							AddToCookie(unit.unum,unit.utype);
+							AddToCookie(unum,utype);
 						});
 					});
 				}
@@ -275,8 +277,8 @@
 					if (online == true) {
 //					if (false) {
 						jQuery.post("http://107.22.89.68:4711/api/responder/",{
-							"unum": unum,
-							"utype": utype
+							"name": unum,
+							"type": utype
 						});
 					}
 					else
