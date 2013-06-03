@@ -106,7 +106,7 @@
 							var utype = unit.type;
 							NewThingy(unum,utype);
 							ClearStorage();	
-							AddToStorage(unum,utype);
+							AddToStorage(units,unum,utype);
 						});
 					});
 				}
@@ -270,7 +270,7 @@
 							"name": unum,
 							"type": utype
 						});
-						AddToStorage(unum,utype);
+						AddToStorage(units,unum,utype);
 					}
 					else
 					{
